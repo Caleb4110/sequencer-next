@@ -11,30 +11,11 @@ const subdivisionTable = {
   "1/16": "16n",
 };
 
-console.log(Tone.getContext().latencyHint);
-
 export default function Home() {
   const [subdivision, setSubdivision] = useState<string>("4n");
   const [currentNote, setCurrentNote] = useState<string>("C");
   const [currentOctave, setCurrentOctave] = useState<string>("4");
-  const [instruments, setInstruments] = useState<any[]>([
-    new Tone.Synth({
-      envelope: {
-        attack: 0.0,
-        decay: 0.1,
-        sustain: 0.01,
-        release: 0.0,
-      },
-    }).toDestination(),
-    new Tone.Synth({
-      envelope: {
-        attack: 0.0,
-        decay: 0.1,
-        sustain: 0.01,
-        release: 0.0,
-      },
-    }).toDestination(),
-  ]);
+  const [instruments, setInstruments] = useState<Tone.Sampler[]>([]);
 
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [stepIndex, setStepIndex] = useState<number>(0);
@@ -44,7 +25,7 @@ export default function Home() {
     [null, null, null, null, null, null, null, null],
   ]);
 
-  const [sequences, setSequences] = useState<Tone.Sequence[] | null>(null);
+  const [sequences, setSequences] = useState<Tone.Sequence[] | null>([]);
 
   const handleSubdivisionChange = (e: any) => {
     e.preventDefault();
@@ -85,10 +66,14 @@ export default function Home() {
     if (Tone.getContext().state !== "running") {
       Tone.setContext(new Tone.Context({ latencyHint: "playback" }));
       await Tone.start();
+      setInstruments([
+        new Tone.Sampler({ C4: "Kick1.wav" }).toDestination().sync(),
+        new Tone.Sampler({ C4: "Snare1.wav" }).toDestination().sync(),
+      ]);
     }
     setIsPlaying((prevIsPlaying) => {
       if (!prevIsPlaying) {
-        Tone.getTransport().start("+0.1");
+        Tone.getTransport().start();
       } else {
         Tone.getTransport().stop();
         setStepIndex(0);
@@ -102,19 +87,19 @@ export default function Home() {
     const newSequences = [
       new Tone.Sequence(
         (time, note) => {
-          instruments[0].triggerAttackRelease(note, subdivision, time + 0.1);
+          instruments[0].triggerAttack(note);
         },
         steps[0],
         subdivision,
-      ).start(Tone.getTransport().progress),
+      ).start(),
 
       new Tone.Sequence(
         (time, note) => {
-          instruments[1].triggerAttackRelease(note, subdivision, time + 0.1);
+          instruments[1].triggerAttack(note);
         },
         steps[1],
         subdivision,
-      ).start(Tone.getTransport().progress),
+      ).start(),
 
       new Tone.Sequence(
         () => {
@@ -133,10 +118,6 @@ export default function Home() {
       return newSequences;
     });
   }, [steps, subdivision]);
-
-  useEffect(() => {
-    console.log(stepIndex);
-  }, [stepIndex]);
 
   return (
     <main className="flex flex-col items-center space-y-10 justify-center p-10">
@@ -201,7 +182,7 @@ export default function Home() {
       </div>
 
       <SequenceRow
-        rowName="Percussion"
+        rowName="Kick"
         rowIndex={0}
         handleNoteChange={handleStepClick}
         notes={steps[0]}
@@ -210,7 +191,7 @@ export default function Home() {
       />
 
       <SequenceRow
-        rowName="Mono Synth"
+        rowName="Snare"
         rowIndex={1}
         handleNoteChange={handleStepClick}
         notes={steps[1]}

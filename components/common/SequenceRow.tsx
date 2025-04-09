@@ -19,8 +19,8 @@ export default function SequenceRow({
 }: Props) {
   return (
     <div className="flex space-x-5 justify-center items-center">
-      <h3 className="w-24 text-right">{rowName}</h3>
-      <div className="grid grid-cols-8 gap-2">
+      <h3 className="w-12 text-right">{rowName}</h3>
+      <div className="grid grid-cols-16 gap-6">
         {notes.map((note, index) => {
           return (
             <SequenceStep
@@ -28,13 +28,7 @@ export default function SequenceRow({
               id={`${rowIndex}-${index}`}
               onClick={handleNoteChange}
               isActive={note}
-              isPlaying={
-                (currentStep === index - 1 ||
-                  (currentStep === 7 && index === 0)) &&
-                isPlaying
-                  ? true
-                  : false
-              }
+              isPlaying={currentStep === index && isPlaying ? true : false}
             />
           );
         })}

@@ -2,7 +2,6 @@ type Props = {
   isActive: string | null;
   onClick: (e: any) => void;
   id: string;
-  note?: string;
   isPlaying: boolean;
 };
 
@@ -10,7 +9,6 @@ export default function SequenceStep({
   isActive,
   id,
   onClick,
-  note,
   isPlaying,
 }: Props) {
   const bgCss = isPlaying
@@ -24,10 +22,8 @@ export default function SequenceStep({
       id={id}
       onClick={onClick}
       className={
-        "size-20 rounded-full transition-colors duration-300" + " " + bgCss
+        "size-16 rounded-full transition-colors duration-300" + " " + bgCss
       }
-    >
-      {note && note}
-    </button>
+    ></button>
   );
 }

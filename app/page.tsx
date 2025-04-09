@@ -1,76 +1,46 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import * as Tone from "tone";
-import Button from "@components/common/Button";
+import { useState } from "react";
+import { Instrument } from "./types/types";
+import createSequence from "./lib/createSequence";
+import { defaultKit } from "./lib/presets/kits";
+import { createInstruments } from "./lib/createInstruments";
 import SequenceRow from "@components/common/SequenceRow";
-
-const subdivisionTable = {
-  "1/4": "4n",
-  "1/8": "8n",
-  "1/16": "16n",
-};
+import Button from "@components/common/Button";
+import initSteps from "./lib/initSteps";
+import Slider from "@components/common/Slider";
 
 export default function Home() {
-  const [subdivision, setSubdivision] = useState<string>("4n");
-  const [currentNote, setCurrentNote] = useState<string>("C");
-  const [currentOctave, setCurrentOctave] = useState<string>("4");
-  const [instruments, setInstruments] = useState<Tone.Sampler[]>([]);
-
+  //==================STATES AND REFS=========================
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const [stepIndex, setStepIndex] = useState<number>(0);
 
-  const [steps, setSteps] = useState<any[][]>([
-    [null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null],
+  const masterSequence = useRef<Tone.Sequence<any> | null>(null);
+  const [sequences, setSequences] = useState<boolean[][]>([
+    initSteps(),
+    initSteps(),
+    initSteps(),
+    initSteps(),
+    initSteps(),
+    initSteps(),
   ]);
+  const [stepIndex, setStepIndex] = useState<number>(0);
+  const [instruments, setInstruments] = useState<Instrument[]>(
+    createInstruments(defaultKit),
+  );
+  const [bpm, setBpm] = useState<number>(120);
+  //====================================================
 
-  const [sequences, setSequences] = useState<Tone.Sequence[] | null>([]);
-
-  const handleSubdivisionChange = (e: any) => {
-    e.preventDefault();
-
-    setSubdivision(
-      subdivisionTable[e.target.value as keyof typeof subdivisionTable],
-    );
-  };
-
-  // Changes the notes array when a note is selected/deselected
-  const handleStepClick = (e: any) => {
-    e.preventDefault();
-    const split = e.target.id.split("-");
-    const row = Number.parseInt(split[0]);
-    const col = Number.parseInt(split[1]);
-
-    setSteps((prevSteps) => {
-      const newSteps = [[...prevSteps[0]], [...prevSteps[1]]];
-      const noteOrNull = newSteps[row][col]
-        ? null
-        : currentNote + currentOctave;
-      newSteps[row][col] = noteOrNull;
-      return newSteps;
-    });
-  };
-
-  const handleNoteChange = (e: any) => {
-    e.preventDefault();
-    setCurrentNote(e.target.value);
-  };
-
-  const handleOctaveChange = (e: any) => {
-    e.preventDefault();
-    setCurrentOctave(e.target.value);
-  };
-
-  const HandlePlayPause = async () => {
+  const handlePlayPause = async () => {
+    // Runs first time to start the audio context
     if (Tone.getContext().state !== "running") {
       Tone.setContext(new Tone.Context({ latencyHint: "playback" }));
       await Tone.start();
-      setInstruments([
-        new Tone.Sampler({ C4: "Kick1.wav" }).toDestination().sync(),
-        new Tone.Sampler({ C4: "Snare1.wav" }).toDestination().sync(),
-      ]);
     }
+
+    // Starts/stops the transport
     setIsPlaying((prevIsPlaying) => {
       if (!prevIsPlaying) {
         Tone.getTransport().start();
@@ -82,122 +52,63 @@ export default function Home() {
     });
   };
 
-  // Handles changes to the sequence
   useEffect(() => {
-    const newSequences = [
-      new Tone.Sequence(
-        (time, note) => {
-          instruments[0].triggerAttack(note);
-        },
-        steps[0],
-        subdivision,
-      ).start(),
+    if (isPlaying) {
+      createSequence(masterSequence, setStepIndex, sequences, instruments);
+    }
+    return () => {
+      masterSequence.current?.dispose();
+    };
+  }, [isPlaying, sequences, instruments]);
 
-      new Tone.Sequence(
-        (time, note) => {
-          instruments[1].triggerAttack(note);
-        },
-        steps[1],
-        subdivision,
-      ).start(),
+  const handleNoteChange = (e: any) => {
+    const [rowIndex, stepIndex] = e.target.id.split("-");
+    const newSequences = [...sequences];
+    console.log(rowIndex, stepIndex);
+    newSequences[rowIndex][stepIndex] = !newSequences[rowIndex][stepIndex];
+    setSequences(newSequences);
+  };
 
-      new Tone.Sequence(
-        () => {
-          setStepIndex((prevIndex) => (prevIndex + 1) % 8);
-        },
-        ["A4", "A4", "A4", "A4", "A4", "A4", "A4", "A4"],
-        subdivision,
-      ).start(),
-    ];
-    setSequences((prevSequences) => {
-      prevSequences?.forEach((sequence) => {
-        sequence.stop();
-        sequence.dispose();
-      });
+  const handleTempoChange = (e: any) => {
+    const newBpm = Number.parseInt(e.target.value);
+    setBpm(newBpm);
+  };
 
-      return newSequences;
-    });
-  }, [steps, subdivision]);
+  useEffect(() => {
+    Tone.getTransport().bpm.value = bpm;
+  }, [bpm]);
 
   return (
-    <main className="flex flex-col items-center space-y-10 justify-center p-10">
-      <div className="flex items-end space-x-10">
+    <main className="m-16 flex flex-col items-center space-y-10 justify-center p-10 bg-bgDarkSecondary border border-accent1Dark rounded-lg shadow-lg">
+      <div className="flex items-center w-full justify-between">
         <Button
-          onClick={HandlePlayPause}
+          onClick={handlePlayPause}
           text={isPlaying ? "Stop Sequence" : "Start Sequence"}
           className={"w-36 " + (isPlaying ? "bg-accent2Dark" : "")}
         />
-        <div className="flex flex-col space-y-2 items-center justify-center">
-          <h3>Subdivision</h3>
-          <div className="flex items-center space-x-2 justify-center">
-            <Button
-              className={subdivision === "4n" ? "bg-accent2Dark" : ""}
-              onClick={handleSubdivisionChange}
-              text="1/4"
-            />
-            <Button
-              className={subdivision === "8n" ? "bg-accent2Dark" : ""}
-              onClick={handleSubdivisionChange}
-              text="1/8"
-            />
-            <Button
-              className={subdivision === "16n" ? "bg-accent2Dark" : ""}
-              onClick={handleSubdivisionChange}
-              text="1/16"
-            />
-          </div>
-        </div>
-        <div className="flex flex-col space-y-3 items-center justify-center">
-          <h3>Note Select</h3>
-          <select
-            className="flex p-2 rounded-lg bg-accent1Dark items-center justify-center"
-            value={currentNote}
-            onChange={handleNoteChange}
-          >
-            <option value="C">C</option>
-            <option value="D">D</option>
-            <option value="E">E</option>
-            <option value="F">F</option>
-            <option value="G">G</option>
-            <option value="A">A</option>
-            <option value="B">B</option>
-          </select>
-        </div>
-        <div className="flex flex-col space-y-3 items-center justify-center">
-          <h3>Octave Select</h3>
-          <select
-            className="p-2 rounded-lg bg-accent1Dark flex items-center justify-center"
-            value={currentOctave}
-            onChange={handleOctaveChange}
-          >
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-          </select>
+        <div className="flex space-x-5 items-center">
+          <h3>Tempo</h3>
+          <h3>{bpm} bpm</h3>
+          <Slider onChange={handleTempoChange} value={bpm} min={60} max={240} />
         </div>
       </div>
 
-      <SequenceRow
-        rowName="Kick"
-        rowIndex={0}
-        handleNoteChange={handleStepClick}
-        notes={steps[0]}
-        isPlaying={isPlaying}
-        currentStep={stepIndex}
-      />
-
-      <SequenceRow
-        rowName="Snare"
-        rowIndex={1}
-        handleNoteChange={handleStepClick}
-        notes={steps[1]}
-        isPlaying={isPlaying}
-        currentStep={stepIndex}
-      />
+      <div className="flex flex-col space-y-7 justify-center items-center">
+        {instruments.map((instrument) => {
+          console.log(instrument.id);
+          return (
+            <SequenceRow
+              key={instrument.id}
+              rowName={instrument.name}
+              rowIndex={instrument.id}
+              handleNoteChange={handleNoteChange}
+              notes={sequences[instrument.id]}
+              isPlaying={isPlaying}
+              currentStep={stepIndex}
+            />
+          );
+        })}
+      </div>
     </main>
   );
 }

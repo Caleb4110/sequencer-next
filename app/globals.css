@@ -8,11 +8,19 @@
   --color-accent2Light: #DAA520;
   --color-hoverLight: #FF4500;
 
-  --color-bgDark: #1C1C1C;
-  --color-textDark: #F4ECEC;
-  --color-accent1Dark: #FF6F47;
-  --color-accent2Dark: #DAA520;
-  --color-hoverDark: #FF4500;
+  --color-bgDark: #1C1C1C; /* Dark background */
+  --color-textDark: #F4ECEC; /* Light text for readability */
+  --color-accent1Dark: #FF6F47; /* Retro orange accent */
+  --color-accent2Dark: #DAA520; /* Golden accent for warmth */
+  --color-hoverDark: #FF4500; /* Hover effect with bright orange */
+
+  --color-bgDarkSecondary: #2A2A2A; /* Slightly lighter dark background */
+  --color-textLight: #D3D3D3; /* Lighter text for softer contrast */
+  --color-accent3Dark: #00B4B4; /* Teal, complementary to retro orange */
+  --color-accent4Dark: #6A0DAD; /* Deep purple, adds bold contrast */
+  --color-accent5Dark: #87CEEB; /* Sky blue, soft contrast with warmth */
+  --color-borderRetro: #8A2BE2; /* Electric blue for borders */
+  --color-buttonRetro: #FFD700; /* Bright yellow buttons */
 
 }
 

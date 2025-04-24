@@ -27,11 +27,14 @@ export default function Home() {
     initSteps(),
   ]);
   const [stepIndex, setStepIndex] = useState<number>(0);
-  const [instruments, setInstruments] = useState<Instrument[]>(
-    createInstruments(defaultKit),
-  );
+  const [instruments, setInstruments] = useState<Instrument[]>([]);
   const [bpm, setBpm] = useState<number>(120);
   //====================================================
+
+  useEffect(() => {
+    setInstruments(createInstruments(defaultKit));
+    setIsLoading(false);
+  }, []);
 
   const handlePlayPause = async () => {
     // Runs first time to start the audio context

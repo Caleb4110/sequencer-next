@@ -1,4 +1,4 @@
-import SequenceStep from "./SequenceStep";
+import SequenceStep from "@components/common/SequenceStep";
 
 type Props = {
   rowName: string;
@@ -6,6 +6,7 @@ type Props = {
   handleNoteChange: (e: any) => void;
   notes: any[];
   isPlaying: boolean;
+  isPitched: boolean;
   currentStep: number;
 };
 
@@ -15,6 +16,7 @@ export default function SequenceRow({
   handleNoteChange,
   notes,
   isPlaying,
+  isPitched,
   currentStep,
 }: Props) {
   return (
@@ -29,6 +31,7 @@ export default function SequenceRow({
               onClick={handleNoteChange}
               isActive={note}
               isPlaying={currentStep === index && isPlaying ? true : false}
+              isPitched={isPitched}
             />
           );
         })}

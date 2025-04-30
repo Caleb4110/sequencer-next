@@ -1,20 +1,5 @@
-export default function initSteps(): boolean[] {
-  return [
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-  ];
+import { Steps } from "@types";
+
+export default function initSteps(): Steps {
+  return Array(16).fill(null);
 }

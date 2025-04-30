@@ -1,15 +1,22 @@
 type Props = {
   currentNote: string;
   setCurrentNote: (note: string) => void;
+  disabled?: boolean;
 };
 
-export default function NoteSelector({ currentNote, setCurrentNote }: Props) {
-  const notes = ["A", "B", "C", "D", "E", "F", "G"];
+export default function NoteSelector({
+  currentNote,
+  setCurrentNote,
+  disabled = false,
+}: Props) {
+  const notes = ["C", "D", "E", "F", "G", "A", "B"];
 
   return (
-    <div className="flex space-x-3 items-center">
-      <h3>Note</h3>
+    <div aria-disabled={disabled} className="flex space-x-3 items-center">
+      <h3 className={disabled ? "text-accent1Light" : ""}>Note</h3>
       <select
+        disabled={disabled}
+        className="disabled:text-accent2Light"
         value={currentNote}
         onChange={(e) => setCurrentNote(e.target.value)}
       >

@@ -8,6 +8,8 @@ type Props = {
   isPlaying: boolean;
   isPitched: boolean;
   currentStep: number;
+  numberOfSteps?: number;
+  isActive?: boolean;
 };
 
 export default function SequenceRow({
@@ -18,11 +20,22 @@ export default function SequenceRow({
   isPlaying,
   isPitched,
   currentStep,
+  numberOfSteps = 16,
+  isActive = true,
 }: Props) {
+  const numCols = {
+    16: "grid-cols-16",
+    8: "grid-cols-8",
+  } as Record<number, string>;
+
+  if (!isActive) {
+    return null;
+  }
+
   return (
     <div className="flex space-x-5 justify-center items-center">
       <h3 className="w-12 text-right">{rowName}</h3>
-      <div className="grid grid-cols-16 gap-6">
+      <div className={`grid ${numCols[numberOfSteps]} gap-6`}>
         {notes.map((note, index) => {
           return (
             <SequenceStep

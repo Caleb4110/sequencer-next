@@ -6,6 +6,7 @@ export default function createSequence(
   setStepIndex: React.Dispatch<React.SetStateAction<number>>,
   stepsGrid: StepsGrid,
   instruments: Instrument[],
+  numberOfSteps: number,
 ): void {
   masterSequence.current = new Tone.Sequence(
     (time, step: number) => {
@@ -34,7 +35,7 @@ export default function createSequence(
       }
       setStepIndex(step);
     },
-    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+    Array.from({ length: numberOfSteps }, (_, i) => i),
     "16n",
   ).start(0);
 }

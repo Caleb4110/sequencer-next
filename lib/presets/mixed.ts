@@ -28,3 +28,8 @@ export const defaultInstruments: sampleData[] = [
     url: "bass.wav",
   },
 ];
+
+export const basicInstruments: sampleData[] = [
+  { name: "Hat", url: "hat.wav" },
+  { name: "Bass", url: "bass.wav" },
+];

@@ -21,7 +21,7 @@ export default function Button({
   return (
     <button
       className={
-        "p-2 rounded-lg bg-accent1Dark flex items-center justify-center transition-colors duration-300 hover:bg-hoverDark " +
+        "p-2 rounded-lg bg-accent1Light flex items-center justify-center transition-colors duration-300 hover:bg-accent1LightHover text-bgLight shadow-md " +
         sizeCss +
         " " +
         className

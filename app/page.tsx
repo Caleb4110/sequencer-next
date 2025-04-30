@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Instrument, StepsGrid } from "@types";
 
 import createSequence from "@lib/createSequence";
-import initSteps from "@lib/initSteps";
+import { initSteps16 } from "@lib/initSteps";
 import { defaultInstruments } from "@lib/presets/mixed";
 import { createInstruments } from "@lib/createInstruments";
 
@@ -14,7 +14,7 @@ import Button from "@components/common/Button";
 import SequenceRow from "@components/ui/SequenceRow";
 import NoteSelector from "@components/ui/NoteSelector";
 import OctaveSelector from "@components/ui/OctaveSelector";
-import TempoSelector from "@components/ui/TempoSelector";
+import BpmControl from "@components/ui/BpmControl";
 
 export default function Home() {
   //==================STATES AND REFS=========================
@@ -23,16 +23,15 @@ export default function Home() {
 
   const masterSequence = useRef<Tone.Sequence<any> | null>(null);
   const [stepsGrid, setStepsGrid] = useState<StepsGrid>([
-    initSteps(),
-    initSteps(),
-    initSteps(),
-    initSteps(),
-    initSteps(),
-    initSteps(),
+    initSteps16(),
+    initSteps16(),
+    initSteps16(),
+    initSteps16(),
+    initSteps16(),
+    initSteps16(),
   ]);
   const [stepIndex, setStepIndex] = useState<number>(0);
   const [instruments, setInstruments] = useState<Instrument[]>([]);
-  const [bpm, setBpm] = useState<number>(120);
   //==========================================================
 
   //===================PITCH CONTROL==========================
@@ -66,7 +65,7 @@ export default function Home() {
 
   useEffect(() => {
     if (isPlaying) {
-      createSequence(masterSequence, setStepIndex, stepsGrid, instruments);
+      createSequence(masterSequence, setStepIndex, stepsGrid, instruments, 16);
     }
     return () => {
       masterSequence.current?.dispose();
@@ -82,19 +81,15 @@ export default function Home() {
     setStepsGrid(newStepsGrid);
   };
 
-  useEffect(() => {
-    Tone.getTransport().bpm.value = bpm;
-  }, [bpm]);
-
   if (isLoading) {
     return (
-      <main className="m-16 flex flex-col items-center space-y-10 justify-center p-10 bg-bgDarkSecondary border border-accent1Dark rounded-lg shadow-lg">
+      <main className="m-16 flex flex-col items-center space-y-10 justify-center p-10  border border-accent1Light rounded-lg shadow-lg">
         <h1 className="text-3xl font-bold">Loading...</h1>
       </main>
     );
   }
   return (
-    <main className="m-16 flex flex-col items-center space-y-10 justify-center p-10 bg-bgDarkSecondary border border-accent1Dark rounded-lg shadow-lg">
+    <main className="m-16 flex flex-col items-center space-y-10 justify-center p-10  border border-accent1Light rounded-lg shadow-lg">
       <div className="flex items-center w-full justify-between">
         <Button
           onClick={handlePlayPause}
@@ -111,7 +106,7 @@ export default function Home() {
           setCurrentOctave={setCurrentOctave}
         />
 
-        <TempoSelector bpm={bpm} setBpm={setBpm} />
+        <BpmControl />
       </div>
       <div className="flex flex-col space-y-7 justify-center items-center">
         {instruments.map((instrument) => {

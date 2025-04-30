@@ -14,17 +14,19 @@ export default function SequenceStep({
   isPitched,
 }: Props) {
   const bgCss = isPlaying
-    ? "bg-accent2Dark text-textDark"
+    ? "bg-accent2Light"
     : isActive
-      ? "bg-accent1Dark text-textDark"
-      : "bg-gray-50 text-textLight";
+      ? "bg-accent1Light"
+      : "bg-bgGray";
 
   return (
     <button
       id={id}
       onClick={onClick}
       className={
-        "size-16 rounded-full transition-colors duration-300" + " " + bgCss
+        "size-16 rounded-full transition-colors duration-75 text-bgLight shadow-lg" +
+        " " +
+        bgCss
       }
     >
       {isPitched && isActive && isActive}

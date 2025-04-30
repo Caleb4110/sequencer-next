@@ -1,11 +1,10 @@
 import Slider from "@components/common/Slider";
 
-type Props = {
-  bpm: number;
-  setBpm: (bpm: number) => void;
-};
+import { useBpm } from "../../context/BpmContext";
 
-export default function TempoSelector({ bpm, setBpm }: Props) {
+export default function BpmControl() {
+  const { bpm, setBpm } = useBpm();
+
   return (
     <div className="flex space-x-5 items-center">
       <h3>Tempo</h3>

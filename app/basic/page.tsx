@@ -42,7 +42,6 @@ export default function Page() {
       stepsGrid={stepsGrid}
       handleNoteChange={handleNoteChange}
       stepIndex={stepIndex}
-      filterInstrument={(inst) => inst.isPitched}
     />
   );
 }

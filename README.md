@@ -1,3 +1,4 @@
+# Sequencer
 This is my implementation of a sequencer based on ToneJs and NextJs
 
 ## Getting Started

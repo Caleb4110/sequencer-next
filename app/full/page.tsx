@@ -3,6 +3,7 @@ import useSequencer from "@hooks/useSequencer";
 import SequencerUI from "@components/ui/SequencerUI";
 import { useState } from "react";
 import { defaultInstruments } from "@lib/presets/mixed";
+import { kit01 } from "@lib/presets/kits";
 import Loading from "@components/ui/Loading";
 
 export default function Page() {
@@ -14,7 +15,8 @@ export default function Page() {
     setStepsGrid,
     instruments,
     handlePlayPause,
-  } = useSequencer(16, defaultInstruments);
+    handleClearSequence
+  } = useSequencer(16, kit01);
 
   const [currentNote, setCurrentNote] = useState("C");
   const [currentOctave, setCurrentOctave] = useState("4");
@@ -41,6 +43,7 @@ export default function Page() {
       instruments={instruments}
       stepsGrid={stepsGrid}
       handleNoteChange={handleNoteChange}
+      handleClearSequence={handleClearSequence}
       stepIndex={stepIndex}
     />
   );

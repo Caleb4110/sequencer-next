@@ -1,8 +1,17 @@
 import { Instrument, StepsGrid } from "@types";
 import * as Tone from "tone";
 
+/*
+ * Creates A sequence based on the params given.
+ * @param {React.MutableRefObject<Tone.Sequence<any> | null>} masterSequence - The ref holding the master sequence.
+ * @param {React.Dispatch<React.SetStateAction<number>>} setStepIndex - The useState setter for stepIndex.
+ * @param {StepsGrid} stepsGrid - The grid of steps. 2D matrix with each row being an instrument.
+ * @param {Instrument[]} - An array of instruments.
+ * @param {numberOfSteps} - Required total number of steps in the sequencer.
+ * @returns {void}
+ */
 export default function createSequence(
-  masterSequence: React.MutableRefObject<Tone.Sequence<any> | null>,
+  masterSequence: React.RefObject<Tone.Sequence<any> | null>,
   setStepIndex: React.Dispatch<React.SetStateAction<number>>,
   stepsGrid: StepsGrid,
   instruments: Instrument[],

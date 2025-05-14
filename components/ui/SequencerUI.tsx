@@ -15,6 +15,7 @@ type Props = {
   instruments: Instrument[];
   stepsGrid: StepsGrid;
   handleNoteChange: (e: any) => void;
+  handleClearSequence: () => void;
   stepIndex: number;
   extraControls?: React.ReactNode;
   filterInstrument?: (instrument: Instrument) => boolean;
@@ -30,6 +31,7 @@ export default function SequencerUI({
   instruments,
   stepsGrid,
   handleNoteChange,
+  handleClearSequence,
   stepIndex,
   extraControls,
   filterInstrument = () => true,
@@ -42,6 +44,7 @@ export default function SequencerUI({
           text={isPlaying ? "Stop Sequence" : "Start Sequence"}
           className={"w-36 " + (isPlaying ? "bg-accent2Dark" : "")}
         />
+        <Button onClick={handleClearSequence} text={"Clear Sequence"} className="w-36" />
         {extraControls}
         <NoteSelector
           currentNote={currentNote}
@@ -66,6 +69,7 @@ export default function SequencerUI({
             currentStep={stepIndex}
             isPitched={instrument.isPitched}
             numberOfSteps={stepsGrid[instrument.id].length}
+            volume={instrument.sampler.volume}
           />
         ))}
       </div>

@@ -1,4 +1,6 @@
 import SequenceStep from "@components/common/SequenceStep";
+import VolumeControl from "./VolumeControl";
+import * as Tone from "tone"
 
 type Props = {
   rowName: string;
@@ -10,6 +12,7 @@ type Props = {
   currentStep: number;
   numberOfSteps?: number;
   isActive?: boolean;
+  volume: Tone.Sampler["volume"]
 };
 
 export default function SequenceRow({
@@ -22,6 +25,7 @@ export default function SequenceRow({
   currentStep,
   numberOfSteps = 16,
   isActive = true,
+  volume,
 }: Props) {
   const numCols = {
     16: "grid-cols-16",
@@ -49,6 +53,8 @@ export default function SequenceRow({
           );
         })}
       </div>
+      <VolumeControl volume={volume} />
+
     </div>
   );
 }

@@ -1,6 +1,6 @@
-import { sampleData } from "@types";
-
 // This file contains presets of mixed percussion and pitched instruments
+
+import { sampleData } from "@types";
 
 export const defaultInstruments: sampleData[] = [
   {

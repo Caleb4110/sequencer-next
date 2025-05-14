@@ -14,6 +14,7 @@ export default function Page() {
     setStepsGrid,
     instruments,
     handlePlayPause,
+    handleClearSequence,
   } = useSequencer(8, basicInstruments);
 
   const [currentNote, setCurrentNote] = useState("C");
@@ -41,6 +42,7 @@ export default function Page() {
       instruments={instruments}
       stepsGrid={stepsGrid}
       handleNoteChange={handleNoteChange}
+      handleClearSequence={handleClearSequence}
       stepIndex={stepIndex}
     />
   );

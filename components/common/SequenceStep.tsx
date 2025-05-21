@@ -4,6 +4,7 @@ type Props = {
   id: string;
   isPlaying: boolean;
   isPitched: boolean;
+  defaultColour?: string;
 };
 
 export default function SequenceStep({
@@ -12,12 +13,13 @@ export default function SequenceStep({
   onClick,
   isPlaying,
   isPitched,
+  defaultColour,
 }: Props) {
   const bgCss = isPlaying
     ? "bg-accent2Light"
     : isActive
       ? "bg-accent1Light"
-      : "bg-bgGray";
+      : defaultColour + " opacity-40";
 
   return (
     <button

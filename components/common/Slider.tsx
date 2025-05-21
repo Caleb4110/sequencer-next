@@ -3,9 +3,10 @@ type Props = {
   value: number;
   min: number;
   max: number;
+  className?: string;
 };
 
-export default function Slider({ onChange, value, min, max }: Props) {
+export default function Slider({ onChange, value, min, max, className = "" }: Props) {
   return (
     <input
       type="range"
@@ -13,7 +14,7 @@ export default function Slider({ onChange, value, min, max }: Props) {
       max={max}
       value={value}
       onChange={onChange}
-      className="w-full h-2 bg-accent2Light rounded-lg appearance-none cursor-pointer"
+      className={"w-full h-2 bg-accent2Light rounded-lg appearance-none cursor-pointer " + className}
     />
   );
 }

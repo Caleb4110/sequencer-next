@@ -13,12 +13,39 @@
   --color-accentGreen: #0E9F85;
   --color-accentBlue: #63CEDA;
   --color-hoverLight: #FF4500;
-  --color-accent3Light: #00FF7F; /* Neon green */
-  --color-accent4Light: #FF00FF; /* Neon pink */
-  --color-accent5Light: #00FFFF; /* Cyan blue */
-  --color-borderRetro: #8A2BE2; /* Electric blue for borders */
+  --color-accent3Light: #47FF6F; /* Neon green */
+  --color-accent4Light: #FF47D7; /* Neon pink */
+  --color-accent5Light: #47D7FF; /* Cyan blue */
+  --color-accent6Light: #8A2BE2; /* Purple */
+  --color-accent3Pastel: #99FFCC; /* Pastel Neon Green */
+  --color-accent4Pastel: #FF99FF; /* Pastel Neon Pink */
+  --color-accent5Pastel: #99FFFF; /* Pastel Cyan Blue */
+  --color-accent6Pastel: #CBA3F5; /* Pastel Purple */
   --color-buttonRetro: #FFD700; /* Bright yellow buttons */
 
+}
+
+.range-thumb-hidden::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 0;
+  height: 0;
+  background: transparent;
+  border: none;
+}
+
+.range-thumb-hidden::-moz-range-thumb {
+  width: 0;
+  height: 0;
+  background: transparent;
+  border: none;
+}
+
+.range-thumb-hidden::-ms-thumb {
+  width: 0;
+  height: 0;
+  background: transparent;
+  border: none;
 }
 
 body {

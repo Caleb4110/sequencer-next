@@ -32,15 +32,28 @@ export default function SequenceRow({
     8: "grid-cols-8",
   } as Record<number, string>;
 
+  const barColors = {
+    0: "bg-accent3Light",
+    4: "bg-accent5Light",
+    8: "bg-accent4Light",
+    12: "bg-accent6Light"
+  } as Record<number, string>;
+
   if (!isActive) {
     return null;
   }
+
+  let color = barColors[0];
 
   return (
     <div className="flex space-x-5 justify-center items-center">
       <h3 className="w-12 text-right">{rowName}</h3>
       <div className={`grid ${numCols[numberOfSteps]} gap-6`}>
         {notes.map((note, index) => {
+          if (index % 4 == 0) {
+            color = barColors[index]
+          }
+
           return (
             <SequenceStep
               key={`${rowIndex}-${index}`}
@@ -49,6 +62,7 @@ export default function SequenceRow({
               isActive={note}
               isPlaying={currentStep === index && isPlaying ? true : false}
               isPitched={isPitched}
+              defaultColour={color}
             />
           );
         })}

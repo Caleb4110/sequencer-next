@@ -42,7 +42,11 @@ export default function createSequence(
           triggerSample(instNum, isActive, isPitched);
         }
       }
-      setStepIndex(step);
+
+      // Schedule the step change using the draw function to hopefully avoid desync
+      Tone.getDraw().schedule(() => {
+        setStepIndex(step);
+      }, time);
     },
     Array.from({ length: numberOfSteps }, (_, i) => i),
     "16n",

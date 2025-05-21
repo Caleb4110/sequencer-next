@@ -14,7 +14,7 @@ export default function Slider({ onChange, value, min, max, className = "" }: Pr
       max={max}
       value={value}
       onChange={onChange}
-      className={"w-full h-2 bg-accent2Light rounded-lg appearance-none cursor-pointer " + className}
+      className={"w-full h-2 bg-accent1Light rounded-lg appearance-none cursor-pointer " + className}
     />
   );
 }

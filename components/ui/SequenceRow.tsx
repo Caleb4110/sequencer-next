@@ -67,7 +67,9 @@ export default function SequenceRow({
           );
         })}
       </div>
-      <VolumeControl volume={volume} />
+      <div className="pl-5">
+        <VolumeControl volume={volume} />
+      </div>
 
     </div>
   );

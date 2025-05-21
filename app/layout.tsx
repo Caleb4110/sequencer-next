@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Elk Sequence",
-  description: "Sequence homepage",
+  title: "Sequencer",
+  description: "Sequencer homepage",
 };
 
 export default function RootLayout({
